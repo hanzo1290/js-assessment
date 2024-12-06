@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Booking Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2>Restaurant Booking Form</h2>
+    <div id="formContainer"></div> <!-- Form will be created here dynamically -->
+
+    <script>
+        // Function to create the form dynamically
+        function createBookingForm() {
+            const formContainer = document.getElementById('formContainer');
+            const form = document.createElement('form');
+            form.id = 'bookingForm';
+
+            // Helper function to create form group elements
+            function createFormGroup(labelText, inputType, id, name, placeholder = '') {
+                const formGroup = document.createElement('div');
+                formGroup.classList.add('form-group');
+
+                const label = document.createElement('label');
+                label.setAttribute('for', id);
+                label.textContent = labelText;
+                formGroup.appendChild(label);
+
+                const input = document.createElement(inputType === 'select' ? 'select' : 'input');
+                input.id = id;
+                input.name = name;
+                if (inputType === 'text' || inputType === 'email' || inputType === 'number') {
+                    input.setAttribute('type', inputType);
+                }
+                if (inputType === 'select') {
+                    input.required = true;
+                } else {
+                    input.setAttribute('placeholder', placeholder);
+                    input.required = true;
+                }
+                formGroup.appendChild(input);
+                return formGroup;
+            }
+
+            // Choice of booking
+            const bookingChoiceGroup = createFormGroup('Choice of Booking:', 'select', 'bookingChoice', 'bookingChoice');
+            const bookingSelect = bookingChoiceGroup.querySelector('select');
+            const options = ['Select Booking Type', 'Full Day Booking', 'Half Day Booking', 'Hourly Booking'];
+            options.forEach(optionText => {
+                const option = document.createElement('option');
+                option.textContent = optionText;
+                option.value = optionText.toLowerCase().replace(/ /g, '');
+                bookingSelect.appendChild(option);
+            });
+            bookingSelect.addEventListener('change', handleBookingChoice);
+
+            // Other form fields
+            form.appendChild(bookingChoiceGroup);
+            form.appendChild(createFormGroup('User Name:', 'text', 'userName', 'userName', 'Enter your name'));
+            form.appendChild(createFormGroup('Mobile Number:', 'text', 'mobileNumber', 'mobileNumber', 'Enter your mobile number'));
+            form.appendChild(createFormGroup('Email:', 'email', 'email', 'email', 'Enter your email address'));
+            form.appendChild(createFormGroup('Number of Persons:', 'number', 'noOfPerson', 'noOfPerson', 'Enter number of persons'));
+
+            // Date field
+            const dateGroup = createFormGroup('Date:', 'text', 'date', 'date');
+            const dateInput = dateGroup.querySelector('input');
+            dateInput.setAttribute('type', 'date');
+            form.appendChild(dateGroup);
+
+            // Slot or Time fields (will be conditionally shown)
+            const slotOrTimeGroup = document.createElement('div');
+            slotOrTimeGroup.classList.add('form-group');
+            slotOrTimeGroup.id = 'slotOrTimeGroup';
+            form.appendChild(slotOrTimeGroup);
+
+            const timeGroup = document.createElement('div');
+            timeGroup.classList.add('form-group');
+            timeGroup.id = 'timeGroup';
+            const timeLabel = document.createElement('label');
+            timeLabel.setAttribute('for', 'time');
+            timeLabel.textContent = 'Select Time:';
+            timeGroup.appendChild(timeLabel);
+            const timeInput = document.createElement('input');
+            timeInput.setAttribute('type', 'time');
+            timeInput.id = 'time';
+            timeInput.name = 'time';
+            timeGroup.appendChild(timeInput);
+            form.appendChild(timeGroup);
+
+            // Submit button
+            const button = document.createElement('button');
+            button.type = 'submit';
+            button.textContent = 'Submit Booking';
+            form.appendChild(button);
+
+            // Append the form to the container
+            formContainer.appendChild(form);
+        }
+
+        // Handle the booking choice change
+        function handleBookingChoice() {
+            const bookingChoice = document.getElementById("bookingChoice").value;
+            const slotOrTimeGroup = document.getElementById("slotOrTimeGroup");
+            const timeGroup = document.getElementById("timeGroup");
+            const slotSelect = document.createElement('select');
+            slotSelect.id = 'slot';
+            slotSelect.name = 'slot';
+
+            // Clear any previous slot options
+            slotOrTimeGroup.innerHTML = '';
+
+            if (bookingChoice === 'fullday') {
+                // Only show the date input
+                slotOrTimeGroup.style.display = 'none';
+                timeGroup.style.display = 'none';
+            } else if (bookingChoice === 'halfday') {
+                // Show date and slot options
+                slotOrTimeGroup.style.display = 'block';
+                const breakfastOption = document.createElement('option');
+                breakfastOption.value = 'breakfast';
+                breakfastOption.textContent = 'Breakfast';
+                slotSelect.appendChild(breakfastOption);
+                const lunchOption = document.createElement('option');
+                lunchOption.value = 'lunch';
+                lunchOption.textContent = 'Lunch';
+                slotSelect.appendChild(lunchOption);
+                const dinnerOption = document.createElement('option');
+                dinnerOption.value = 'dinner';
+                dinnerOption.textContent = 'Dinner';
+                slotSelect.appendChild(dinnerOption);
+                slotOrTimeGroup.appendChild(slotSelect);
+                timeGroup.style.display = 'none';
+            } else if (bookingChoice === 'hourly') {
+                // Show date and time input
+                timeGroup.style.display = 'block';
+                slotOrTimeGroup.style.display = 'none';
+            }
+        }
+
+        // Handle form submission (Just display an alert for now)
+        document.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form from submitting the traditional way
+
+            const formData = new FormData(event.target);
+            let bookingDetails = '';
+            formData.forEach((value, key) => {
+                bookingDetails += `${key}: ${value}\n`;
+            });
+
+            // Show a confirmation alert with all booking details
+            alert(`Booking Details:\n\n${bookingDetails}`);
+        });
+
+        // Initialize the form on page load
+        createBookingForm();
+    </script>
+</body>
+</html>
