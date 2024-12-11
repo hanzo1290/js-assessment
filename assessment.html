@@ -4,35 +4,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .container
+        {
+            text-align: center;
+        }
+        ul li
+        {
+            display: inline;
+            margin: 10px;
+           
+        }
+        #dat,#tim,#press2
+        {
+            display: none;
+        }
+
+        .rel
+        {
+            position: relative;
+        }
+        .box,.box1
+        {
+            background-color: aqua;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            padding: 5px;
+            display: none;
+            transition: 1s;
+           
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="container">
+        <ul>
+            <li class="rel" id="press1" onclick="box1()">Choice of booking >
+                <div class="box" id="1">
+                    <p id="a" onclick="full()">Full day booking</p>
+                    <p id="b" onclick="half()">Half day booking</p>
+                    <p id="c" onclick="hour()">Hourly booking</p>
+                </div>
+            </li>
+            <li>User name </li>
+            <li>Mobile Number</li>
+            <li>Email</li>
+            <li>No of person</li>
+            <li id="dat">Date</li>
+            <li id="tim">Time</li>
+            <li class="rel" id="press2" onclick="box2()" >Slot >
+                <div class="box1" id="2">
+                    
+                </div>
+            </li>
+
+        </ul>
+    </div>
 
     <script>
+         box = document.getElementById('1');
+         box3 = document.getElementById('2');
+         rel1 = document.getElementById('press1');
+         rel2 = document.getElementById('press2');
+         sel1 = document.getElementById('a');
+         sel2 = document.getElementById('b');
+         sel3 = document.getElementById('c');
+         dat = document.getElementById('dat');
+         tim = document.getElementById('tim');
+        // rel1.addEventListner(click,box1());
+       
+       function full()
+       {
+        dat.style.display="block"
+       }
+       function half()
+       {
+        dat.style.display="block"
+        rel2.style.display="block"
+       }
+       function hour    ()
+       {
+        dat.style.display="block";
+        tim.style.display="block";
+        
+       }
+
+       
+       
+        
+
+      function box1()
+      {
+        box.style.display="block"
+        
+      }
+      function box2()
+      {
+        list = document.createElement('p');
+       txt = document.createTextNode('Breakfast');
+       list.append(txt);
+       x=list;
+       list = document.createElement('p');
+       txt = document.createTextNode('Lunch');
+       list.append(txt);
+       y=list;
+       list = document.createElement('p');
+       txt = document.createTextNode('Dinner');
+       list.append(txt);
+       z=list;
+      
          
-    //    list = document.createElement('li');
-    //    txt = document.createTextNode('Choice of booking');
-    //    list.append(txt);
-       
-    //    x =list;
-       button = document.createElement('button');
-       button.innerHTML="Choice of booking"
-       console.log(button);
-       document.body.append(button)
-       
-       button.addEventListner('click',clicks)
-        function clicks()
-        {
-        button.innerHTML="hello"
-       
-        }
+         box3.append(x,y,z);
+         console.log(box3);
+         
+      }
+    
        
         
 
 
 
 
-
+//    list = document.createElement('li');
+    //    txt = document.createTextNode('Choice of booking');
+    //    list.append(txt);
+       
+    //    x =list;
+    //    button = document.createElement('button');
+    //    button.innerHTML="Choice of booking"
+    //    console.log(button);
+    //    document.body.append(button)
+       
+    //    button.addEventListner('click',clicks)
+    //     function clicks()
+    //     {
+    //     button.innerHTML="hello"
+       
+    //     }
     //    list = document.createElement('li');
     //    txt = document.createTextNode('Username');
     //    list.append(txt);
